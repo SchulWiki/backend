@@ -20,4 +20,7 @@ public class ValidationCredentialsRequest {
     @Size(min = 12, message = "Password must be at least 12 characters")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&_-]).*$", message = "Password must contain at least one letter (A-z), one number (0-9), and one special character (@$!%*#?&_-)")
     private String password;
+
+    @NotBlank(message = "Confirm Password is required")
+    private String confirmPassword;
 }

@@ -125,5 +125,9 @@ public class AuthService {
         if(userService.existsByUsername(request.getUsername())) {
             throw new ConflictException("Username already exists");
         }
+
+        if(!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new ConflictException("Password and Confirm Password do not match");
+        }
     }
 }

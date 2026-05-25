@@ -3,6 +3,7 @@ package com.schulwiki.backend.auth.controller;
 import com.schulwiki.backend.auth.dto.*;
 import com.schulwiki.backend.auth.security.refreshToken.dto.RefreshTokenRequest;
 import com.schulwiki.backend.auth.service.AuthService;
+import com.schulwiki.backend.error.MessageResponse;
 import com.schulwiki.backend.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

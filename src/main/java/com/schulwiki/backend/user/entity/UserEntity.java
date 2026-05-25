@@ -7,13 +7,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_users_username", columnList = "username", unique = true),
+        @Index(name = "idx_users_email", columnList = "email", unique = true)
+})
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 public class UserEntity {
 
     @Id
@@ -23,7 +30,6 @@ public class UserEntity {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -39,4 +45,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role = Role.GUEST;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false;
 }

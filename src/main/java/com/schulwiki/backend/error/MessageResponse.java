@@ -1,4 +1,4 @@
-package com.schulwiki.backend.auth.dto;
+package com.schulwiki.backend.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

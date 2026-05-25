@@ -12,7 +12,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    
     public UserEntity findById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
     }

@@ -11,6 +11,8 @@ public interface UserMapper {
     UserResponse mapToResponse(UserEntity user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(source = "validationCredentialsRequest.username", target = "username")
+    @Mapping(source = "validationCredentialsRequest.password", target = "password", ignore = true)
     UserEntity mapToEntity(RegisterRequest request);
 }

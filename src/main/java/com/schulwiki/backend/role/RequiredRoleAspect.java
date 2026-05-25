@@ -19,7 +19,7 @@ public class RequiredRoleAspect {
         UserEntity currentUser = currentUserProvider.getCurrent();
 
         if(currentUser.getRole().getWeight() < requireRole.value().getWeight()) {
-            throw new ForbiddenException("User does not have the required permissions");
+            throw new ForbiddenException("Not enough permissions");
         }
     }
 }

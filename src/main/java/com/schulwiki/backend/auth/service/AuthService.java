@@ -3,6 +3,7 @@ package com.schulwiki.backend.auth.service;
 import com.schulwiki.backend.auth.dto.LoginRequest;
 import com.schulwiki.backend.auth.dto.AuthResponse;
 import com.schulwiki.backend.auth.dto.RegisterRequest;
+import com.schulwiki.backend.auth.dto.ValidationCredentialsRequest;
 import com.schulwiki.backend.auth.security.jwt.JwtService;
 import com.schulwiki.backend.auth.security.refreshToken.dto.RefreshTokenRequest;
 import com.schulwiki.backend.auth.security.refreshToken.entity.RefreshToken;
@@ -13,6 +14,7 @@ import com.schulwiki.backend.user.dto.UserResponse;
 import com.schulwiki.backend.user.entity.UserEntity;
 import com.schulwiki.backend.user.mapper.UserMapper;
 import com.schulwiki.backend.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,16 +42,16 @@ public class AuthService {
 
     @Transactional
     public void registerUser(RegisterRequest request) {
-        log.info("Registering new user with username: {}", request.getUsername());
+        log.info("Registering new user with username: {}", request.getValidationCredentialsRequest().getUsername());
 
-        if (userService.existsByUsername(request.getUsername())) {
+        if (userService.existsByUsername(request.getValidationCredentialsRequest().getUsername())) {
             throw new ConflictException("Username already exists");
         }
         UserEntity user = userMapper.mapToEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getValidationCredentialsRequest().getPassword()));
 
         userService.save(user);
-        log.info("User {} registered successfully", request.getUsername());
+        log.info("User {} registered successfully", request.getValidationCredentialsRequest().getUsername());
     }
 
     @Transactional
@@ -117,5 +119,11 @@ public class AuthService {
         UserEntity currentUser = currentUserProvider.getCurrent();
         UserEntity user = userService.findById(currentUser.getId());
         return userMapper.mapToResponse(user);
+    }
+
+    public void validateCredentials(@Valid ValidationCredentialsRequest request) {
+        if(userService.existsByUsername(request.getUsername())) {
+            throw new ConflictException("Username already exists");
+        }
     }
 }

@@ -38,24 +38,18 @@ public class JwtFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ") && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
                 String authHeaderr = request.getHeader("Authorization");
-
                 String token = authHeader.substring(7);
-
                 Claims claims = jwtService.extractAllClaims(token);
 
                 String expectedFingerprint = claims.get("device_fingerprint", String.class);
                 String actualFingerprint = request.getHeader("X-Device-Fingerprint");
-
                 if (expectedFingerprint != null && !expectedFingerprint.equals(actualFingerprint)) {
                     throw new JwtException("Invalid device fingerprint");
                 }
 
                 Long userId = Long.valueOf(claims.getSubject());
-
                 UserDetails userDetails = userDetailsService.loadUserById(userId);
-
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
             } catch (Exception e) {

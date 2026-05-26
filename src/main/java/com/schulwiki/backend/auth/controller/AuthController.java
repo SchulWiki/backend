@@ -1,11 +1,9 @@
 package com.schulwiki.backend.auth.controller;
 
-import com.schulwiki.backend.auth.dto.AuthResponse;
-import com.schulwiki.backend.auth.dto.LoginRequest;
-import com.schulwiki.backend.auth.dto.MessageResponse;
-import com.schulwiki.backend.auth.dto.RegisterRequest;
+import com.schulwiki.backend.auth.dto.*;
 import com.schulwiki.backend.auth.security.refreshToken.dto.RefreshTokenRequest;
 import com.schulwiki.backend.auth.service.AuthService;
+import com.schulwiki.backend.error.MessageResponse;
 import com.schulwiki.backend.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+
+    @PostMapping("/valid-credentials")
+    public ResponseEntity<MessageResponse> validCredentials(@Valid @RequestBody ValidationCredentialsRequest request) {
+        authService.validateCredentials(request);
+        return ResponseEntity.ok(new MessageResponse("Credentials are valid"));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) {
